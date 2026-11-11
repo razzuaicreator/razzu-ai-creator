@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07152e">
+<title>RAZZU AI CREATOR</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#07152e;color:#fff;font-family:Arial,sans-serif}
+header{text-align:center;padding:28px 15px;background:linear-gradient(135deg,#102b55,#07152e);border-bottom:1px solid #2878c8}
+.logo{font-size:30px;font-weight:900;letter-spacing:2px;color:#dceaff}
+.logo span{color:#42a5ff}
+.tagline{color:#c2d7f5;font-size:13px;margin-top:8px}
+main{max-width:850px;margin:25px auto;padding:15px}
+.panel{background:#102443;border:1px solid #28517e;border-radius:17px;padding:20px;margin-bottom:20px}
+h2{color:#62b5ff;margin-top:0}
+label{display:block;margin:15px 0 7px;font-size:14px;color:#dceaff}
+input,select,textarea{width:100%;padding:13px;border-radius:9px;border:1px solid #42658c;background:#07152e;color:white;font-size:15px}
+textarea{min-height:85px;resize:vertical}
+button{border:0;border-radius:9px;padding:13px 17px;font-size:15px;font-weight:bold;cursor:pointer}
+.generate{width:100%;margin-top:20px;background:linear-gradient(90deg,#087cf0,#36b8ff);color:white}
+.secondary{background:#24476e;color:white;margin:5px 3px}
+.output{background:#081a33;border:1px solid #31577e;border-radius:10px;padding:14px;margin-top:13px}
+.output h3{color:#60baff;margin:0 0 9px}
+.output p{white-space:pre-wrap;overflow-wrap:anywhere;color:#e3edff;line-height:1.6}
+.small{font-size:12px;color:#9eb8d8;line-height:1.5}
+footer{text-align:center;color:#91aaca;padding:25px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">RAZZU <span>AI</span></div>
+<div style="font-size:20px;font-weight:bold;color:#e8bd65">CREATOR</div>
+<div class="tagline">Your Ideas. Our AI. Your Creativity.</div>
+</header>
+
+<main>
+<section class="panel">
+<h2>✨ Create Your Content Pack</h2>
+<p class="small">Turn your ideas into social media content.</p>
+
+<label>Enter Your Video Topic</label>
+<textarea id="topic" placeholder="Example: The importance of education..."></textarea>
+
+<label>Select Platform</label>
+<select id="platform">
+<option>YouTube</option>
+<option>Instagram</option>
+<option>Facebook</option>
+<option>All Platforms</option>
+</select>
+
+<label>Select Language</label>
+<select id="language">
+<option value="hi">Hindi</option>
+<option value="en">English</option>
+<option value="ur">Urdu</option>
+</select>
+
+<label>Video Duration</label>
+<select id="duration">
+<option>30 Seconds</option>
+<option>60 Seconds</option>
+<option>90 Seconds</option>
+<option>3 Minutes</option>
+<option>5 Minutes</option>
+</select>
+
+<label>Content Style</label>
+<select id="style">
+<option>Motivational</option>
+<option>Educational</option>
+<option>Islamic</option>
+<option>Emotional</option>
+<option>Facts</option>
+<option>Professional</option>
+</select>
+
+<label>Target Audience (Optional)</label>
+<input id="audience" placeholder="Example: Students, beginners, everyone">
+
+<button class="generate" onclick="generate()">✨ Generate My Content Pack</button>
+<p class="small">Prototype mode: this first version uses sample templates. Real AI connection will be added in a later phase.</p>
+</section>
+
+<section class="panel" id="results" hidden>
+<h2>🎬 Your Content Pack</h2>
+<div id="outputs"></div>
+<button class="secondary" onclick="copyAll()">Copy All Content</button>
+<button class="secondary" onclick="downloadText()">Download TXT</button>
+<button class="secondary" onclick="resetForm()">Create Another</button>
+</section>
+</main>
+
+<footer>
+RAZZU AI CREATOR © 2026<br>
+Your Ideas. Our AI. Your Creativity.
+</footer>
+
+<script>
+let currentContent = [];
+
+function generate(){
+const topic=document.getElementById("topic").value.trim();
+if(!topic){alert("Please enter your video topic first.");return;}
+
+const lang=document.getElementById("language").value;
+const platform=document.getElementById("platform").value;
+const duration=document.getElementById("duration").value;
+const style=document.getElementById("style").value;
+const audience=document.getElementById("audience").value.trim() || "Everyone";
+
+const words={
+hi:{
+title:"आपका नया वीडियो: "+topic,
+description:"आज हम "+topic+" के बारे में आसान भाषा में जानेंगे। इस वीडियो को पूरा देखें और दूसरों के साथ शेयर करें।",
+hook:"क्या आप जानते हैं? "+topic+" आपकी जिंदगी में बड़ा बदलाव ला सकता है!",
+points:"1. विषय का परिचय\n2. इसकी अहमियत\n3. इसके फायदे\n4. जरूरी सीख",
+script:"नमस्कार दोस्तों!\nआज का हमारा विषय है: "+topic+"।\nआइए इसे आसान भाषा में समझते हैं।\nसबसे पहले हमें इसकी अहमियत समझनी चाहिए। इसके बाद हम इससे मिलने वाली सीख को अपनी जिंदगी में अपनाएँ।\nधन्यवाद! वीडियो पसंद आए तो शेयर जरूर करें।",
+caption:"एक अच्छी सोच, एक नई शुरुआत! ❤️",
+cta:"वीडियो पसंद आए तो Like, Share और Follow जरूर करें।",
+hashtags:"#RAZZUAICREATOR #Motivation #Knowledge #Hindi",
+keywords:topic+", "+style+", Hindi video, "+platform
+},
+en:{
+title:"Discover: "+topic,
+description:"In this video, we explore "+topic+" and understand why it matters. Watch, learn and share!",
+hook:"Have you ever wondered how "+topic+" can make a difference?",
+points:"1. Introduction to the topic\n2. Why it matters\n3. Important benefits\n4. Key lessons",
+script:"Hello everyone!\nToday we are exploring "+topic+".\nLet's understand this topic step by step. First, let's look at why it matters. Then we will explore its benefits and the lessons we can learn.\nThank you for watching. Keep learning and keep growing!",
+caption:"Small ideas can create big changes. ✨",
+cta:"Like, share and follow for more content!",
+hashtags:"#RAZZUAICREATOR #Learning #Motivation #Creator",
+keywords:topic+", "+style+", English video, "+platform
+},
+ur:{
+title:"آپ کا نیا موضوع: "+topic,
+description:"آج ہم "+topic+" کے بارے میں آسان انداز میں جانیں گے۔ ویڈیو مکمل دیکھیں اور دوسروں کے ساتھ شیئر کریں۔",
+hook:"کیا آپ جانتے ہیں کہ "+topic+" ہماری زندگی میں اہم کردار ادا کر سکتا ہے؟",
+points:"1. موضوع کا تعارف\n2. اس کی اہمیت\n3. اس کے فائدے\n4. اہم سبق",
+script:"السلام علیکم دوستو!\nآج ہمارا موضوع ہے: "+topic+"۔\nآئیے اسے آسان انداز میں سمجھتے ہیں۔ سب سے پہلے اس کی اہمیت جانتے ہیں، پھر اس کے فائدوں اور اہم سبق پر بات کرتے ہیں۔\nدیکھنے کا شکریہ۔ خوش رہیں اور سیکھتے رہیں!",
+caption:"اچھی سوچ، نئی امید اور بہتر مستقبل۔ ✨",
+cta:"ویڈیو پسند آئے تو لائک، شیئر اور فالو ضرور کریں۔",
+hashtags:"#RAZZUAICREATOR #Urdu #Knowledge #Motivation",
+keywords:topic+", "+style+", Urdu video, "+platform
+}
+};
+
+const data=words[lang];
+const fields=[
+["Video Title",data.title],
+["Description",data.description],
+["Opening Hook",data.hook],
+["Main Points",data.points],
+["Video Script",data.script],
+["Caption",data.caption],
+["Call To Action",data.cta],
+["Hashtags",data.hashtags],
+["SEO Keywords",data.keywords],
+["Settings","Platform: "+platform+"\nDuration: "+duration+"\nStyle: "+style+"\nAudience: "+audience]
+];
+
+currentContent=fields;
+const container=document.getElementById("outputs");
+container.replaceChildren();
+
+fields.forEach(([heading,value],i)=>{
+const box=document.createElement("div");
+box.className="output";
+const h=document.createElement("h3");
+h.textContent=heading;
+const p=document.createElement("p");
+p.textContent=value;
+const b=document.createElement("button");
+b.className="secondary";
+b.textContent="Copy";
+b.onclick=()=>navigator.clipboard.writeText(value).then(()=>alert("Copied!")).catch(()=>alert("Please select and copy the text."));
+box.append(h,p,b);
+container.appendChild(box);
+});
+
+document.getElementById("results").hidden=false;
+document.getElementById("results").scrollIntoView({behavior:"smooth"});
+}
+
+function copyAll(){
+const text=currentContent.map(x=>x[0]+"\n"+x[1]).join("\n\n");
+navigator.clipboard.writeText(text).then(()=>alert("Content copied!")).catch(()=>alert("Copy not supported. Please copy individual sections."));
+}
+
+function downloadText(){
+const text=currentContent.map(x=>x[0]+"\n"+x[1]).join("\n\n");
+const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download="razzu-content-pack.txt";a.click();
+URL.revokeObjectURL(url);
+}
+
+function resetForm(){
+document.getElementById("topic").value="";
+document.getElementById("results").hidden=true;
+document.getElementById("topic").focus();
+}
+</script>
+</body>
+</html>
